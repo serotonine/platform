@@ -2,7 +2,6 @@ workspace:
   base: /test
   path: ssk
 
-
 services:
   web:
     image: fpfis/php56-dev
