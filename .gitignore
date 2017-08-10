@@ -4,10 +4,17 @@
 .idea/
 nbproject/
 
+# Ignore contrib modules, themes and libraries in the symlinked profiles folder.
+profiles/multisite_drupal_*/libraries
+profiles/multisite_drupal_*/modules/contrib
+profiles/multisite_drupal_*/themes
+
 # Ignore local configuration overrides.
 build.properties.local
 phpcs.xml
-tests/behat.yml
+tests/behat*.yml
+tests/*/behat*.yml
+phpunit.xml
 
 # Ignore build artifacts.
 /bin/
@@ -18,3 +25,21 @@ tests/behat.yml
 /tmp/
 vendor/
 /resources/git/hooks/pre-push/phpcs
+
+# Ignore third party libraries that are placed inside module and theme folders
+# during the build.
+profiles/common/themes/ec_resp/bootstrap/
+profiles/common/themes/ec_resp/scripts/html5shiv.min.js
+profiles/common/themes/ec_resp/scripts/jquery.mousewheel.min.js
+profiles/common/themes/ec_resp/scripts/respond.min.js
+profiles/common/libraries/fancybox/
+profiles/common/libraries/flexslider/
+profiles/common/libraries/fullcalendar/
+profiles/common/libraries/fullcalendar_resources/
+profiles/common/libraries/jplayer/
+profiles/common/libraries/jquery.imgareaselect/
+profiles/common/libraries/jquery/
+profiles/common/libraries/modernizr/
+profiles/common/libraries/plupload/
+profiles/common/modules/features/multisite_wysiwyg/ckeditor/skins/
+profiles/*/modules/custom/nexteuropa_newsroom/
