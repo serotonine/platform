@@ -1,5 +1,5 @@
 {
-    "name": "verbruggenalex/platform",
+    "name": "ec-europa/platform",
     "require": {
         "ec-europa/ssk": "dev-feature/platform as 3.0.0"
     },
