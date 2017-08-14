@@ -11,10 +11,10 @@ profiles/multisite_drupal_*/themes
 
 # Ignore local configuration overrides.
 build.properties.local
-phpcs.xml
-tests/behat*.yml
-tests/*/behat*.yml
-phpunit.xml
+/phpcs.xml
+/tests/behat*.yml
+/tests/*/behat*.yml
+/phpunit.xml
 
 # Ignore build artifacts.
 /bin/
