@@ -1,0 +1,37 @@
+imports:
+  - /home/verbral/startplatform/lib/tests/behat.yml
+default:
+  suites:
+    default:
+      paths:
+        - /home/verbral/startplatform/lib/tests/vendor/bex/behat-screenshot/features/screenshot-combining.feature
+        - /home/verbral/startplatform/lib/tests/vendor/bex/behat-screenshot/features/screenshot-taking.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/doc/_static/snippets/api.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/doc/_static/snippets/blackbox.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/doc/_static/snippets/drush.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/doc/_static/snippets/apitag.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/subcontexts/find.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/language.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/api.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/blackbox.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/d8.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/drush.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/api_background.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/field_handlers.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/features/d6.feature
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/fixtures/drupal7/modules/behat_test/behat_test.features.field_instance.inc
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/fixtures/drupal7/modules/behat_test/behat_test.features.inc
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/fixtures/drupal7/modules/behat_test/behat_test.features.field_base.inc
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/fixtures/drupal7/modules/behat_test/behat_test.features.taxonomy.inc
+        - /home/verbral/startplatform/lib/tests/vendor/drupal/drupal-extension/fixtures/drupal7/modules/behat_test/behat_test.features.user_permission.inc
+        - /home/verbral/startplatform/lib/tests/vendor/behat/mink-extension/features/search.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/etalons/long_title_feature.yml
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/big_pystring.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/empty_scenarios.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/empty_scenario.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/pystring.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/ru_division.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/outline_with_spaces.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/test_unit.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/empty_scenario_without_linefeed.feature
+        - /home/verbral/startplatform/lib/tests/vendor/behat/gherkin/tests/Behat/Gherkin/Fixtures/features/outline_with_step_table.feature

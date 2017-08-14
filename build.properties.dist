@@ -121,12 +121,11 @@ project.build.dir = ${project.basedir}/platform
 platform.profile.name = multisite_drupal_standard
 
 # The branch, tag or commit to use, eg. 'master', 'develop', '2.1.56',
-# '7df0d254b'. It is possible to use MySQL style wildcards here, so you can use
-# '2.%' to get the latest tagged 2.x.x release which was built.
-# For most projects you would want to follow 'master' so that you always have
-# the latest version that is deployed on production. Use 'develop' to check if
-# your project is compatible with the upcoming release.
-platform.package.reference = 2.4
+# '7df0d254b'. It is possible to define only major and/or minor to get the
+# latest reference tag. For example 2.4 which will check online for the latest
+# available build package. For most projects you would want to follow 'master'
+# so that you always have the latest version.
+platform.package.version = 2.4
 
 # The provider that hosts the platform repository.
 platform.package.provider = git-hub
@@ -164,10 +163,16 @@ dist.build.dir = ${project.basedir}/${phing.subsite.build.dir}
 
 # Temporary folder.
 # GOOD BUT could be renamed.
-phing.subsite.tmp.dir = ${project.basedir}/tmp
+project.tmp.dir = ${project.basedir}/tmp
 
 # Project makefile.
 project.make = ${project.resources.dir}/site.make
+
+# The build location
+phing.project.build.dir = platform
+
+# Build locations.
+platform.build.dir = ${project.basedir}/${phing.project.build.dir}
 
 # Local resources.
 project.resources.dir = ${project.basedir}/resources
@@ -221,7 +226,7 @@ dist.build.composer.lock = ${dist.build.dir}/composer.lock
 project.rebuild.auto = 0
 
 # Rebuild backup destination.
-project.rebuild.backup.destination = ${phing.subsite.tmp.dir}/backup-site
+project.rebuild.backup.destination = ${project.tmp.dir}/backup-site
 
 # Semicolon separated list of folders to backup.
 project.rebuild.backup.folders = ${project.build.files.dir};${project.build.tmp.dir}
@@ -232,13 +237,15 @@ project.rebuild.backup.files = ${project.build.settings.dir}/settings.php
 
 # Behat configuration
 # -------------------
-## TO REVIEW WITH PLATFORM
 
-# The location of the Behat executable.
-behat.bin = ${project.build.subsite.dir}/vendor/bin/behat
+# Browser name for selenium.
+#behat.browser.name = chrome
 
 # The location of the Behat tests.
 behat.dir = ${project.basedir}/tests
+
+# The location of the Behat executable.
+behat.bin = ${behat.dir}/vendor/behat/behat/bin/behat
 
 # The location of the Behat configuration template.
 behat.yml.template = ${behat.dir}/behat.yml.dist
@@ -247,28 +254,49 @@ behat.yml.template = ${behat.dir}/behat.yml.dist
 behat.yml.path = ${behat.dir}/behat.yml
 
 # The base URL to use in Behat tests.
-## TODO: Make this docker compatible by using selenium:port.
 behat.base_url = http://localhost:8080
 
+# The URL of the Behat webdriver host.
+behat.wd_host.url = http://selenium:4444/wd/hub
+
 # The location to search for Behat subcontexts.
-behat.subcontexts.path = ${project.build.subsite.dir}
+behat.subcontexts.path = ${project.build.profiles.dir}/common/modules
 
 # The output format to use for Behat tests, either 'progress' or 'pretty'.
 behat.formatter.name = progress
 
 # Enable strict mode in Behat tests. Will only pass if all tests are explicitly
 # passing.
-behat.options.strict = false
+behat.options.strict = true
 
 # Set verbosity for Behat tests. 0 is completely silent, 1 is normal output, 2
 # shows exception backtraces, 3 shows debugging information.
 behat.options.verbosity = 2
 
-# Stream output to show progress.
-behat.options.passthru = true
+# Load balancer Phing task configuration.
+behat.load_balancer.containers = 5
+behat.load_balancer.root = ${behat.dir}
+behat.load_balancer.destination = ${behat.dir}/balancer
+behat.load_balancer.import = ${behat.yml.path}
 
-# The path to the custom Behat Contexts.
-behat.src.dir = ${behat.dir}/src
+
+# PHPUnit configuration
+# -------------------
+
+# The location of the PHPUnit executable.
+phpunit.bin = ${project.basedir}/bin/phpunit
+
+# The location of the PHPUnit configuration files.
+phpunit.dir = ${project.basedir}/tests
+
+# The location of the PHPUnit configuration template.
+phpunit.xml.template = ${phpunit.dir}/phpunit.xml.dist
+
+# The location of the generated Behat configuration file.
+phpunit.xml.path = ${phpunit.dir}/phpunit.xml
+
+# The base URL to use in PHPUnit tests.
+phpunit.base_url = ${behat.base_url}
 
 
 # PHP CodeSniffer configuration
@@ -369,18 +397,36 @@ copy.path.haltonerror = true
 
 # Shared paths
 # ------------
-## GOOD
 
 # Global share location.
-share.global.path = /tmp
+# This can be a volume mount from docker or a local path outside
+# of your project. Correct configuration will speed up the build
+# process immensly. CI can also mount these locations for builds.
+# TODO: Implement a cache clear command, to start fresh.
+
+share.path = /tmp
+share.name = share
+share.path.global = ${share.path}/${share.name}
 
 # Main share locations.
-share.platform.path = ${share.global.path}/platform
-share.subsites.path = ${share.global.path}/subsites
-share.composer.path = ${share.global.path}/composer
+share.path.platform = ${share.path.global}/platform
+share.path.subsites = ${share.path.global}/subsites
+share.path.composer = ${share.path.global}/composer
 
-# The path to save deploy packages to:
-subsite.release.path = ${share.subsites.path}/${subsite.id}
+# Platform packages.
+share.path.platform.packages = ${share.path.platform}/packages
+share.path.platform.packages.deploy = ${share.path.platform.packages}/deploy
+share.path.platform.packages.test = ${share.path.platform.packages}/test
+share.path.platform.packages.database = ${share.path.platform.packages}/database
+
+# Subsites packages.
+share.path.subsites.packages = ${share.path.subsites}/packages
+share.path.subsites.packages.deploy = ${share.path.subsites.packages}/deploy
+share.path.subsites.packages.deploy = ${share.path.subsites.packages}/test
+
+# Composer shared packages.
+share.path.composer.packages = ${share.path.composer}/packages
+share.path.composer.packages.shared = ${share.path.composer.packages}/shared
 
 
 # Docker
@@ -394,7 +440,31 @@ docker.project.id = environment
 # Composer hook phingcall target lists. Space separated only.
 # -----------------------------------------------------------
 ## GOOD
-composer.hook.post.install = starterkit-link-binary starterkit-copy-templates
+composer.hook.post.install = starterkit-init  starterkit-link-binary starterkit-copy-templates
 composer.hook.post.update =
 composer.hook.pre.install =
 composer.hook.pre.update =
+
+# Flickr configuration
+# --------------------
+
+# A valid API key & secret used by the behat tests
+flickr.key = foobar
+flickr.secret = bas
+
+# Integration configuration
+# -------------------------
+
+# Port on which the mocked integration server used by the behat tests will listen.
+integration.server.port = 8888
+
+# Varnish configuration
+# -------------------------
+
+# Port on which the mocked Varnish server used by the behat tests will listen.
+varnish.server.port = 8888
+
+# Drush Context configuration
+# ---------------------------
+drush.db.dump = ${platform.build.dir}/dump.sql
+

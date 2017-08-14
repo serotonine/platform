@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project default="help">
+
+    <!-- Help function to display the targets. -->
+    <target name="help" hidden="true">
+        <exec command="${phing.bin} -f ${phing.file} -l | sed -n '/Main targets/,$p'" outputproperty="phing-targets" logoutput="false" />
+        <echo msg="${line.separator}${phing-targets}" />
+    </target>
+
+    <!-- Highest priority to env variables. -->
+    <property environment="env" />
+
+    <!-- Load build properties. -->
+    <if>
+        <available file="build.properties.local" type="file" />
+        <then>
+            <property file="build.properties.local" />
+        </then>
+    </if>
+    <if>
+        <available file="build.properties" type="file" />
+        <then>
+            <property file="build.properties" />
+        </then>
+        <elseif>
+            <equals arg1="${project.basedir}" arg2="${ssk.root}" />
+            <then>
+                <fail msg="${project.basedir} ---- ${ssk.root} Without a build.properties" />
+            </then>
+        </elseif>
+    </if>
+    <if>
+        <available file="vendor/ec-europa/ssk/build.properties.dist" type="file" />
+        <then>
+            <property file="vendor/ec-europa/ssk/build.properties.dist" />
+        </then>
+    </if>
+
+    <!-- Load version properties if available. -->
+    <property file="${project.tmp.dir}/build.properties.version" />
+
+    <!-- Set compose project name if available. -->
+    <if>
+        <isset property="env.COMPOSE_PROJECT_NAME" />
+        <then>
+            <property name="docker.project.id" value="${env.COMPOSE_PROJECT_NAME}" override="true" />
+        </then>
+    </if>
+
+    <!-- Get latest stable if major version is defined. -->
+    <target name="project-platform-version-set" hidden="true">
+        <if>
+            <matches string="${platform.package.version}" pattern="^[1-9]+\." />
+            <then>
+                <propertyregex
+                    property="platform.version.major"
+                    subject="${platform.package.version}"
+                    pattern="^([1-9]+)\."
+                    match="$1"
+                    override="true" />
+                <propertyregex
+                    property="platform.version.minor"
+                    subject="${platform.package.version}"
+                    pattern="^[1-9]+\.([1-9]+)"
+                    match="$1"
+                    override="true" />
+                <propertyregex
+                    property="platform.version.reference"
+                    subject="${platform.package.version}"
+                    pattern="^[1-9]+\.[1-9]+\.([1-9]+)"
+                    match="$1"
+                    override="true" />
+                <if>
+                    <isset property="platform.version.minor" />
+                    <then>
+                        <php expression="${platform.version.minor} + 1" returnProperty="platform.upgrade" level="debug" />
+                        <exec command="echo $(curl -s 'https://platform-ci.ne-dev.eu/releases/' | grep -oP 'href=&quot;platform-dev-\K${platform.version.major}\.${platform.version.minor}\.[0-9]+' | sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1)" outputproperty="platform.package.version.current" />
+                        <exec command="echo $(curl -s 'https://platform-ci.ne-dev.eu/releases/' | grep -oP 'href=&quot;platform-dev-\K${platform.version.major}\.${platform.upgrade}\.[0-9]+' | sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1)" outputproperty="platform.package.version.next" />
+                        <exec command="echo $(curl -s 'https://platform-ci.ne-dev.eu/releases/' | grep -oP 'href=&quot;platform-dev-\K${platform.version.major}\.[0-9]+\.[0-9]+' | sort -t. -rn -k1,1 -k2,2 -k3,3 | head -1)" outputproperty="platform.package.version.latest" />
+                    </then>
+                </if>
+            </then>
+        </if>
+        <if>
+            <and>
+                <matches string="${platform.package.version.current}" pattern="^[1-9]+\.[1-9]+\.[1-9]+$" />
+                <versioncompare
+                    version="${platform.package.version.current}"
+                    desiredVersion="${platform.package.version}"
+                    operator="gt" />
+            </and>
+            <then>
+                <echo msg="The platform package version is set to ${platform.package.version}." />
+                <echo msg="The build will be performed with version ${platform.package.version.current}." />
+                <propertyregex
+                    property="platform.version.reference"
+                    subject="${platform.package.version.current}"
+                    pattern="^[1-9]+\.[1-9]+\.([1-9]+)"
+                    match="$1"
+                    override="true" />
+                <property name="platform.package.version" value="${platform.package.version.current}" override="true" />
+            </then>
+        </if>
+        <if>
+            <and>
+                <matches string="${platform.package.version.next}" pattern="^[1-9]+\.[1-9]+\.[1-9]+$" />
+                <versioncompare
+                    version="${platform.package.version.next}"
+                    desiredVersion="${platform.package.version}"
+                    operator="gt" />
+            </and>
+            <then>
+                <!-- TODO: this allows for automatic upgrading if we were to provide a setting. -->
+                <php expression="${platform.version.minor} + 1" returnProperty="platform.upgrade" level="debug" />
+                <echo msg="Last released deploy package is at ${platform.package.version.latest}." level="warning" />
+                <echo msg="Please upgrade your platform version to ${platform.version.major}.${platform.upgrade}." level="warning" />
+            </then>
+        </if>
+        <echoproperties regex="~^platform\.version|^platform\.package\.version\.~" destfile="${project.tmp.dir}/build.properties.version" />
+    </target>
+
+    <!-- Check if site exists. -->
+    <if>
+        <available file="${project.build.settings.dir}/settings.php" type="file"/>
+        <then>
+            <property name="site-detected" value="1" />
+        </then>
+    </if>
+
+    <!-- Check if backup exists. -->
+    <if>
+        <available file="${project.rebuild.backup.destination}" type="dir"/>
+        <then>
+            <property name="backup-detected" value="1" />
+        </then>
+    </if>
+
+    <!-- Echo the composer hook phingcalls. -->
+    <target name="composer-echo-hook-phingcalls" hidden="true">
+        <echoproperties prefix="composer.hook."/>
+    </target>
+
+    <!-- Copies a given folder to a new location. -->
+    <target name="copy-folder" hidden="true">
+        <copy todir="${copy.destination.path}" haltonerror="${copy.path.haltonerror}">
+            <fileset dir="${copy.source.path}" defaultexcludes="false" />
+        </copy>
+    </target>
+
+    <!-- Delete a given folder. -->
+    <target name="delete-folder" hidden="true">
+        <!-- Use the faster native command on UNIX systems. -->
+        <if>
+            <os family="unix" />
+            <then>
+                <echo msg='rm -rf "${folder.to.delete}"' />
+                <exec
+                    command='rm -rf "${folder.to.delete}"'
+                    dir="${project.basedir}"
+                    passthru="true"
+                    checkreturn="true"
+                />
+            </then>
+            <else>
+                <delete dir="${folder.to.delete}" includeemptydirs="true" failonerror="false" />
+            </else>
+        </if>
+    </target>
+
+    <!-- Make the given folder writeable. -->
+    <target name="unprotect-folder" hidden="true">
+        <!-- This should only be used on folders that need to be removed. -->
+        <if>
+            <available file="${folder.to.unprotect}" type="dir" />
+            <then>
+                <chmod mode="0777" failonerror="true" verbose="false" quiet="true">
+                    <fileset dir="${folder.to.unprotect}" />
+                </chmod>
+            </then>
+        </if>
+    </target>
+
+   <!-- Create temp dirs. -->
+<!--    <target name="project-directories-ensure" hidden="true"> -->
+        <if>
+            <available file="${share.path.global}" type="dir"/>
+            <then>
+                <echo msg="Global share directory ${share.path.global} available."/>
+            </then>
+            <else>
+                <trycatch>
+                    <try>
+                        <exec
+                            command="mkdir -p ${share.path.global}"
+                            checkreturn="true" />
+                        <echoproperties
+                            prefix="share.path."
+                            destfile="${project.tmp.dir}/build.properties.share" />
+                    </try>
+                    <catch>
+                        <echo msg="Unable to create global share directory." level="warning"/>
+                        <echo msg="Switching over to local tmp dir for caching." />
+                        <property
+                            name="share.path.global"
+                            value="${project.tmp.dir}/${share.name}"
+                            override="true" />
+                        <mkdir dir="${share.path.global}" />
+                   </catch>
+                </trycatch>
+            </else>
+        </if>
+        <if>
+            <available file="${project.tmp.dir}" type="dir"/>
+            <then>
+                <echo msg="Temporary directory ${project.tmp.dir} available."/>
+            </then>
+            <else>
+                <mkdir dir="${project.tmp.dir}"/>
+            </else>
+        </if>
+<!--    </target>-->
+
+</project>

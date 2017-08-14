@@ -1,0 +1,37 @@
+imports:
+  - /home/verbral/startplatform/lib/tests/behat.yml
+default:
+  suites:
+    default:
+      paths:
+        - /home/verbral/startplatform/lib/tests/features/search/europa_search_ec_europa.feature
+        - /home/verbral/startplatform/lib/tests/features/content_types/article_ec_europa.feature
+        - /home/verbral/startplatform/lib/tests/features/content_types/content_type_mgmt.feature
+        - /home/verbral/startplatform/lib/tests/features/content_types/article_ec_resp.feature
+        - /home/verbral/startplatform/lib/tests/features/content_types/page.feature
+        - /home/verbral/startplatform/lib/tests/features/menus/feature_set.feature
+        - /home/verbral/startplatform/lib/tests/features/menus/user_menu.feature
+        - /home/verbral/startplatform/lib/tests/features/multisite_wysiwyg/rich_text_editing.feature
+        - /home/verbral/startplatform/lib/tests/features/integration/integration_producer.feature
+        - /home/verbral/startplatform/lib/tests/features/integration/integration_consumer.feature
+        - /home/verbral/startplatform/lib/tests/features/nexteuropa_token/block_type_and_tokens.feature
+        - /home/verbral/startplatform/lib/tests/features/nexteuropa_token/invalid_token_type.feature
+        - /home/verbral/startplatform/lib/tests/features/nexteuropa_token/handling_invalid_wysiwyg_token.feature
+        - /home/verbral/startplatform/lib/tests/features/tmgmt/tmgmt_workbench.feature
+        - /home/verbral/startplatform/lib/tests/features/tmgmt/tmgmt_poetry_permissions.feature
+        - /home/verbral/startplatform/lib/tests/features/tmgmt/tmgmt_poetry_translations.feature
+        - /home/verbral/startplatform/lib/tests/features/security/xss_vulnerability.feature
+        - /home/verbral/startplatform/lib/tests/features/feature_set/nexteuropa_trackedchanges_set.feature
+        - /home/verbral/startplatform/lib/tests/features/ecas.feature
+        - /home/verbral/startplatform/lib/tests/features/images.feature
+        - /home/verbral/startplatform/lib/tests/features/site_level_language_switcher.feature
+        - /home/verbral/startplatform/lib/tests/features/piwik.feature
+        - /home/verbral/startplatform/lib/tests/features/page_layout.feature
+        - /home/verbral/startplatform/lib/tests/features/content_editing_editor.feature
+        - /home/verbral/startplatform/lib/tests/features/communities.feature
+        - /home/verbral/startplatform/lib/tests/features/subscriptions.feature
+        - /home/verbral/startplatform/lib/tests/features/content_level_language_switcher.feature
+        - /home/verbral/startplatform/lib/tests/features/events.feature
+        - /home/verbral/startplatform/lib/tests/features/content_translation.feature
+        - /home/verbral/startplatform/lib/tests/features/editorial_workflow_admin.feature
+        - /home/verbral/startplatform/lib/tests/features/pathauto.feature
