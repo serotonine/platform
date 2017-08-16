@@ -99,7 +99,10 @@ default:
         log_in: "Log in"
     Bex\Behat\ScreenshotExtension:
       screenshot_taking_mode: failed_scenarios
-      active_image_drivers: img42
+      image_drivers:
+        local:
+          screenshot_directory: {{ platform.build.dir }}/tmp/screens
+          clear_screenshot_directory: true 
   formatters:
     {{ behat.formatter.name }}: ~
 
