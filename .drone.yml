@@ -9,8 +9,8 @@ services:
      - DOCUMENT_ROOT=/test/ssk/platform
   mysql:
     image: fpfis/mysql56
-  ecas:
-    image: fpfis-acpcloud622hotmail.azurecr.io/ecas
+#  ecas:
+#    image: fpfis-acpcloud622hotmail.azurecr.io/ecas
   selenium:
     image: selenium/standalone-chrome
     environment:
@@ -20,36 +20,55 @@ services:
 
 pipeline:
 
-  prepare-mysql:
-    group: prepare
-    image: fpfis/mysql56
-    commands:
-      - sleep 5
-      - mysqladmin -h mysql -uroot create database
-
   prepare-php:
-    group: prepare
     image: fpfis/php56-dev
+    volumes:
+      - /cache/composer:/root/.composer/cache
     commands:
       - composer update
       - composer install
 
+  prepare-mysql:
+    group: prepare
+    image: fpfis/mysql56
+    commands:
+      - mysqladmin -h mysql -uroot create database
+
+
   build-dev:
     image: fpfis/php56-dev
+    volumes:
+      - /cache/composer:/root/.composer/cache
+      - /cache/drush:/root/.drush/cache
     commands:
       - ./ssk/phing build-platform-dev -D behat.base_url='http://web:8080' -D'behat.wd_host'='http://selenium:4444/wd/hub' -D'behat.browser_name'='chrome'
+
   install:
     image: fpfis/php56-dev
+    volumes:
+      - /cache/composer:/root/.composer/cache
+      - /cache/drush:/root/.drush/cache
     commands:
       - ./ssk/phing build-project-clean -D'drupal.db.host'='mysql' -D'drupal.db.name'=database
 
+  # Generate a dump from the freshly installed platform
+  dump-fresh-database:
+    image: fpfis/mysql56
+    commands:
+      - mysqldump -h mysql database|gzip > install.sql.gz
+
   test:
     image: fpfis/php56-dev
+    volumes:
+      - /cache/composer:/root/.composer/cache
     commands:
-      - ./ssk/phing test-run-behat
+      - ./ssk/phing test-run-behat -D behat.base_url='http://web:8080' -D'behat.wd_host'='http://selenium:4444/wd/hub' -D'behat.browser_name'='chrome'
 
   build-dist:
     image: fpfis/php56-dev
+    volumes:
+      - /cache/composer:/root/.composer/cache
+      - /cache/drush:/root/.drush/cache
     commands:
       - ./ssk/phing build-platform-dist -D'composer.bin'=$(which composer)
       - tar -czf ${DRONE_REPO_NAME}-${DRONE_TAG}.tar.gz -C build .
