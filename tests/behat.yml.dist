@@ -20,8 +20,8 @@ default:
         - Drupal\nexteuropa\Context\MinkContext
         - Drupal\nexteuropa\Context\VariableContext
         - Drupal\nexteuropa\Context\FlickrContext:
-            key: '{{ flickr.key }}'
-            secret: '{{ flickr.secret }}'
+            key: '{{ project.flickr.key }}'
+            secret: '{{ project.flickr.secret }}'
         - Drupal\nexteuropa\Context\MediaContext
         - Drupal\nexteuropa\Context\TaxonomyContext
         - Drupal\nexteuropa\Context\ViewsContext
@@ -37,7 +37,7 @@ default:
         - Drupal\nexteuropa\Context\DrupalMailContext
         - Drupal\nexteuropa\Context\PiwikRulesContext
         - Drupal\nexteuropa\Context\DrushContext:
-            drush_bin: '{{ drush.bin }}'
+            drush_bin: '{{ project.bin.drush }}'
             db_dump_location: '{{ drush.db.dump }}'
       filters:
         tags: "~@wip&&~@communities&&~@ec_resp_theme&&~@theme_wip"
@@ -49,7 +49,7 @@ default:
       selenium2:
         wd_host: '{{ behat.wd_host.url }}'
       base-url: '{{ behat.base_url }}'
-      files_path: '{{ platform.build.dir }}'
+      files_path: '{{ project.build.platform.dir }}'
     Drupal\nexteuropa\Extensions\TransformExtension:
       transform_tokens:
         nept_element:block:page-language-switcher: '.block-language-selector-page'
@@ -67,7 +67,7 @@ default:
       api_driver: 'drupal'
       blackbox: ~
       drupal:
-        drupal_root: '{{ platform.build.dir }}'
+        drupal_root: '{{ project.build.platform.dir }}'
       subcontexts:
         paths:
           - '{{ behat.subcontexts.path }}'
@@ -81,8 +81,8 @@ default:
         front_success_message_selector: "div.ecl-message.ecl-message--success > ul.ecl-list.ecl-message__body > li"
         front_warning_message_selector: "div.ecl-message.ecl-message--warning > ul.ecl-list.ecl-message__body > li"
       drush:
-        root: '{{ platform.build.dir }}'
-        binary: '{{ drush.bin }}'
+        root: '{{ project.build.platform.dir }}'
+        binary: '{{ project.bin.drush }}'
       region_map:
         admin_menu: "#admin-menu-menu"
         content_top: ".region-content-top"
@@ -101,7 +101,7 @@ default:
       screenshot_taking_mode: failed_scenarios
       image_drivers:
         local:
-          screenshot_directory: {{ platform.build.dir }}/tmp/screens
+          screenshot_directory: {{ project.build.platform.dir }}/tmp/screens
           clear_screenshot_directory: true 
   formatters:
     {{ behat.formatter.name }}: ~
