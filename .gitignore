@@ -12,7 +12,7 @@ profiles/multisite_drupal_*/themes
 # Ignore local configuration overrides.
 build.properties.local
 /phpcs.xml
-/tests/balancer/*
+/tests/balancer/*.yml
 /tests/behat*.yml
 /tests/*/behat*.yml
 /tests/phpunit.xml
@@ -26,21 +26,22 @@ build.properties.local
 /tmp/
 vendor/
 /resources/git/hooks/pre-push/phpcs
+/composer.lock
 
 # Ignore third party libraries that are placed inside module and theme folders
 # during the build.
-profiles/common/themes/ec_resp/bootstrap/
-profiles/common/themes/ec_resp/scripts/html5shiv.min.js
-profiles/common/themes/ec_resp/scripts/jquery.mousewheel.min.js
-profiles/common/themes/ec_resp/scripts/respond.min.js
-profiles/common/libraries/fancybox/
-profiles/common/libraries/flexslider/
-profiles/common/libraries/fullcalendar/
-profiles/common/libraries/fullcalendar_resources/
-profiles/common/libraries/jplayer/
-profiles/common/libraries/jquery.imgareaselect/
-profiles/common/libraries/jquery/
-profiles/common/libraries/modernizr/
-profiles/common/libraries/plupload/
-profiles/common/modules/features/multisite_wysiwyg/ckeditor/skins/
-profiles/*/modules/custom/nexteuropa_newsroom/
+lib/profiles/*/themes/ec_resp/bootstrap/
+lib/profiles/*/themes/ec_resp/scripts/html5shiv.min.js
+lib/profiles/*/themes/ec_resp/scripts/jquery.mousewheel.min.js
+lib/profiles/*/themes/ec_resp/scripts/respond.min.js
+lib/profiles/*/libraries/fancybox/
+lib/profiles/*/libraries/flexslider/
+lib/profiles/*/libraries/fullcalendar/
+lib/profiles/*/libraries/fullcalendar_resources/
+lib/profiles/*/libraries/jplayer/
+lib/profiles/*/libraries/jquery.imgareaselect/
+lib/profiles/*/libraries/jquery/
+lib/profiles/*/libraries/modernizr/
+lib/profiles/*/libraries/plupload/
+lib/profiles/*/modules/features/multisite_wysiwyg/ckeditor/skins/
+lib/profiles/*/modules/custom/nexteuropa_newsroom/
