@@ -53,7 +53,7 @@ command to complete installation in one single command:
 
 <details><summary><b>composer \ <sup>(binary or docker)</sup><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create-project \ <sup>(command)</sup><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;verbruggenalex/platform \ <sup>(project package)</sup><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ec-europa/platform \ <sup>(project package)</sup><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;foldername \<sup> (install directory)</sup><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dev-master <sup>(project version)</sup></b></summary>
 
