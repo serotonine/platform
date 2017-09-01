@@ -1,10 +1,11 @@
 {
     "name": "ec-europa/platform",
     "require": {
-        "ec-europa/ssk": "dev-master"
+        "ec-europa/ssk": "dev-master as 3.0.0"
     },
     "scripts": {
-        "post-install-cmd": "PROJECT=$(pwd) composer install --working-dir=vendor/ec-europa/ssk/includes/composer --ignore-platform-reqs --no-interaction --no-suggest --ansi",
-        "post-create-project-cmd": "PROJECT=$(pwd) composer install --working-dir=vendor/ec-europa/ssk/includes/composer --ignore-platform-reqs --no-interaction --no-suggest --ansi"
+        "post-install-cmd": "@ssk-install",
+        "post-update-cmd": "@ssk-install",
+        "ssk-install": "PROJECT=$(pwd) composer run-script ssk-install -d ./vendor/ec-europa/ssk"
     }
 }
