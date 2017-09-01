@@ -20,8 +20,8 @@ default:
         - Drupal\nexteuropa\Context\MinkContext
         - Drupal\nexteuropa\Context\VariableContext
         - Drupal\nexteuropa\Context\FlickrContext:
-            key: '{{ project.flickr.key }}'
-            secret: '{{ project.flickr.secret }}'
+            key: '{{ flickr.key }}'
+            secret: '{{ flickr.secret }}'
         - Drupal\nexteuropa\Context\MediaContext
         - Drupal\nexteuropa\Context\TaxonomyContext
         - Drupal\nexteuropa\Context\ViewsContext
@@ -37,7 +37,7 @@ default:
         - Drupal\nexteuropa\Context\DrupalMailContext
         - Drupal\nexteuropa\Context\PiwikRulesContext
         - Drupal\nexteuropa\Context\DrushContext:
-            drush_bin: '{{ project.bin.drush }}'
+            drush_bin: '{{ toolkit.dir.bin.drush }}'
             db_dump_location: '{{ drush.db.dump }}'
       filters:
         tags: "~@wip&&~@communities&&~@ec_resp_theme&&~@theme_wip"
@@ -82,7 +82,7 @@ default:
         front_warning_message_selector: "div.ecl-message.ecl-message--warning > ul.ecl-list.ecl-message__body > li"
       drush:
         root: '{{ build.platform.dir }}'
-        binary: '{{ project.bin.drush }}'
+        binary: '{{ toolkit.dir.bin.drush }}'
       region_map:
         admin_menu: "#admin-menu-menu"
         content_top: ".region-content-top"
