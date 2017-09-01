@@ -49,7 +49,7 @@ default:
       selenium2:
         wd_host: '{{ behat.wd_host.url }}'
       base-url: '{{ behat.base_url }}'
-      files_path: '{{ project.build.platform.dir }}'
+      files_path: '{{ build.platform.dir }}'
     Drupal\nexteuropa\Extensions\TransformExtension:
       transform_tokens:
         nept_element:block:page-language-switcher: '.block-language-selector-page'
@@ -67,7 +67,7 @@ default:
       api_driver: 'drupal'
       blackbox: ~
       drupal:
-        drupal_root: '{{ project.build.platform.dir }}'
+        drupal_root: '{{ build.platform.dir }}'
       subcontexts:
         paths:
           - '{{ behat.subcontexts.path }}'
@@ -81,7 +81,7 @@ default:
         front_success_message_selector: "div.ecl-message.ecl-message--success > ul.ecl-list.ecl-message__body > li"
         front_warning_message_selector: "div.ecl-message.ecl-message--warning > ul.ecl-list.ecl-message__body > li"
       drush:
-        root: '{{ project.build.platform.dir }}'
+        root: '{{ build.platform.dir }}'
         binary: '{{ project.bin.drush }}'
       region_map:
         admin_menu: "#admin-menu-menu"
@@ -101,7 +101,7 @@ default:
       screenshot_taking_mode: failed_scenarios
       image_drivers:
         local:
-          screenshot_directory: {{ project.build.platform.dir }}/tmp/screens
+          screenshot_directory: {{ build.platform.dir }}/tmp/screens
           clear_screenshot_directory: true 
   formatters:
     {{ behat.formatter.name }}: ~
