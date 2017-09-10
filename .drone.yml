@@ -6,7 +6,7 @@ services:
   web:
     image: fpfis/php56-dev
     environment:
-     - DOCUMENT_ROOT=/test/ssk/platform
+     - DOCUMENT_ROOT=/test/ssk/build
   mysql:
     image: fpfis/mysql56
 #  ecas:
@@ -15,30 +15,29 @@ services:
     image: selenium/standalone-chrome
     environment:
       - SE_OPTS=-log /tmp/selenium.log
-#  solr:
-#    image: fpfis/solr5
+  solr:
+    image: fpfis/solr5
 
 pipeline:
 
-  prepare-php:
-    group: prepare
+  toolkit:
     image: fpfis/php56-dev
     commands:
       - composer update
     volumes:
       - /cache:/cache
 
-  build-dev:
+  build:
     image: fpfis/php56-dev
     commands:
-      - ./ssk/phing build-platform-dev -D behat.base_url='http://web:8080' -D'behat.wd_host'='http://selenium:4444/wd/hub' -D'behat.browser_name'='chrome'
+      - ./ssk/phing build-platform-dev
     volumes:
       - /cache:/cache
 
   install:
     image: fpfis/php56-dev
     commands:
-      - ./ssk/phing install-project-clean -D'drupal.db.host'='mysql' -D'drupal.db.name'=database
+      - ./ssk/phing install-project-clean
     volumes:
       - /cache:/cache
 
