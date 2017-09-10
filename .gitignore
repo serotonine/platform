@@ -23,7 +23,7 @@ build.properties.local
 /ssk-*
 /build/
 /platform/
-/tmp/
+/.tmp/
 vendor/
 /resources/git/hooks/pre-push/phpcs
 /composer.lock
