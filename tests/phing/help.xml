@@ -31,9 +31,9 @@
         </elseif>
     </if>
     <if>
-        <available file="vendor/ec-europa/ssk/build.properties.dist" type="file" />
+        <available file="vendor/ec-europa/toolkit/build.properties.dist" type="file" />
         <then>
-            <property file="vendor/ec-europa/ssk/build.properties.dist" />
+            <property file="vendor/ec-europa/toolkit/build.properties.dist" />
         </then>
     </if>
 
