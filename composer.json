@@ -1,7 +1,10 @@
 {
-    "name": "ec-europa/subsite",
+    "name": "ec-europa/platform",
+    "description": "Platform template to initiate a new profile project that uses toolkit.",
+    "homepage": "https://github.com/ec-europa/toolkit#nexteuropa-toolkit",
+    "license": "EUPL-1.1",
     "require": {
-        "ec-europa/toolkit": "dev-develop as 3.0.0"
+        "ec-europa/toolkit": "3.*"
     },
     "scripts": {
         "post-install-cmd": "@toolkit-install",
